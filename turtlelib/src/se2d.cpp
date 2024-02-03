@@ -23,7 +23,7 @@ std::ostream & operator<<(std::ostream & os, const Twist2D & tw)
 
 std::istream & operator>>(std::istream & is, Twist2D & tw)
 {
-  char first = is.peek();
+    char first = is.peek(); // cons auto
   bool has_brk = (first == '[');
 
   std::string str_w;
@@ -46,28 +46,28 @@ std::istream & operator>>(std::istream & is, Twist2D & tw)
   return is;
 }
 
-Transform2D::Transform2D()
+    Transform2D::Transform2D() // use initializer list and delegating constructors
 {
   __twist.omega = 0.0;
   __twist.x = 0.0;
   __twist.y = 0.0;
 }
 
-Transform2D::Transform2D(Vector2D trans)
+Transform2D::Transform2D(Vector2D trans) // use initializer list and delegating constructors
 {
   __twist.omega = 0.0;
   __twist.x = trans.x;
   __twist.y = trans.y;
 }
 
-Transform2D::Transform2D(double radians)
+Transform2D::Transform2D(double radians) // use initializer list and delegating constructors
 {
   __twist.omega = radians;
   __twist.x = 0.0;
   __twist.y = 0.0;
 }
 
-Transform2D::Transform2D(Vector2D trans, double radians)
+Transform2D::Transform2D(Vector2D trans, double radians) // use initializer list and delegating constructors
 {
   __twist.omega = radians;
   __twist.x = trans.x;
@@ -76,19 +76,19 @@ Transform2D::Transform2D(Vector2D trans, double radians)
 
 Point2D Transform2D::operator()(Point2D p) const
 {
-  double c = cos(__twist.omega);
-  double s = sin(__twist.omega);
-  double x = __twist.x;
-  double y = __twist.y;
+    double c = cos(__twist.omega); // const auto
+    double s = sin(__twist.omega); // const auto
+  double x = __twist.x; // const auto
+  double y = __twist.y; // const atuo
 
   double result_x = c * p.x - s * p.y + x;
   double result_y = s * p.x + c * p.y + y;
 
-  return {result_x, result_y};
+  return {result_x, result_y}; // no need for the result_x/result_y temporaries
 }
 
 Vector2D Transform2D::operator()(Vector2D v) const
-{
+{// const auto... (will stop writing, you get the idea)
   double c = cos(__twist.omega);
   double s = sin(__twist.omega);
 
@@ -127,7 +127,7 @@ Transform2D Transform2D::inv() const
   double radian = atan2(inv_sin, inv_cos);
   Vector2D v = {inv_x, inv_y};
 
-  return Transform2D(v, radian);
+  return Transform2D(v, radian); // can return {v, radian}, compiler already knows its a Transform2D
 }
 
 Transform2D & Transform2D::operator*=(const Transform2D & rhs)

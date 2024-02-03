@@ -39,6 +39,7 @@ std::istream & operator>>(std::istream & is, Twist2D & tw);
 class Transform2D
 {
 private:
+    // Double __ is reserved for compiler usage, do not name things with __ in them
   struct Twist2D __twist;
   double __trans_matrix[3][3];
 

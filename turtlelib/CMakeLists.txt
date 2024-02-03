@@ -6,6 +6,7 @@ cmake_minimum_required(VERSION 3.22)
 # find the c and c++ compilers
 project(turtlelib)
 
+# Eigen was not necessary, it should not be included here
 # Find your dependencies.
 # Many libraries ship with files that allow CMake to find them
 # Then general behavior is to call "find_package" but the options
@@ -112,11 +113,14 @@ if(BUILD_TESTING)
     add_executable(test_${PROJECT_NAME} tests/test_geometry2d.cpp tests/test_se2d.cpp tests/test_svg.cpp)
     # add_executable(test_se2d tests/test_se2d2.cpp)
 
+    # THis is not needed for executables. Include directories are provided by target_link libraries that
+    # are used by the executable
     target_include_directories(test_${PROJECT_NAME}
         PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>
         $<INSTALL_INTERFACE:include/>)
 
+    # Do not leave commented out code
     # target_include_directories(test_se2d
     #     PUBLIC
     #     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/>
@@ -127,6 +131,7 @@ if(BUILD_TESTING)
 
     # register the test with CTest, telling it what executable to run
     add_test(NAME ${PROJECT_NAME}_test COMMAND test_${PROJECT_NAME})
+    # Do not leave commented out code
     # add_test(NAME se2d COMMAND test_se2d)
     # add_test(NAME ${PROJECT_NAME} COMMAND test_se2d)
 endif()

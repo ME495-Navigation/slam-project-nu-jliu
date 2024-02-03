@@ -14,25 +14,27 @@
 #include <iostream>
 #include <fstream>
 
-#ifndef TURTLELIB_SVG_HPP_INCLUDE_GUARD
+#ifndef TURTLELIB_SVG_HPP_INCLUDE_GUARD // These should be at the top, encompassing the header files as well
 #define TURTLELIB_SVG_HPP_INCLUDE_GUARD
 namespace turtlelib
 {
 /// \brief Normalize a vector
 /// \param v The vector to be normalize
 /// \return The normalized vector
-Vector2D normalize(Vector2D v);
+    Vector2D normalize(Vector2D v); // should be in se2d.hpp
 class Svg
 {
 
 private:
-  std::ofstream __ofs;
+    std::ofstream __ofs; // DO not use __ in identifiers
   Transform2D __tf_origin;
   double __origin_x;
   double __origin_y;
   double __scale;
 
   /// \brief Initialize the environment for the frame
+    /// This should be implemented in the .cpp file rather than inline in the header
+    /// also it should be part of the constructor not a separate init function
   void init_svg()
   {
     __scale = 96.0;
@@ -44,8 +46,8 @@ private:
     __ofs <<
       "<svg width=\"8.500000in\" height=\"11.000000in\" viewBox=\"0 0 816.000000 1056.000000\" xmlns=\"http://www.w3.org/2000/svg\">"
           << std::endl;
-    __ofs << "<defs>" << std::endl;
-    __ofs << "<marker" << std::endl;
+    __ofs << "<defs>" << std::endl; // endl is not necessary for all of these, its saying flush the buffer, but you ojnly need to do that at the very end.
+    __ofs << "<marker" << std::endl; // instead it would be better to use \n
     __ofs << "\tstyle=\"overflow:visible\"" << std::endl;
     __ofs << "\tid=\"Arrow1Sstart\"" << std::endl;
     __ofs << "\trefX=\"0.0\"" << std::endl;
@@ -80,13 +82,14 @@ public:
 
   /// \brief Opens the svg file with specified filename
   /// \param filename the name of the svg file.
-  explicit Svg(std::string filename);
+    /// SHould specify what happens if the filename is not valid
+    explicit Svg(std::string filename);// should be std::string_view or const std::string &
 
   /// \brief Draw a line for the specified vector
   /// \param frame
   /// \param tail the tail of the vector
   /// \param v the vector to be drawn.
-  void draw_line(Transform2D frame, Point2D tail, Vector2D v, std::string color);
+    void draw_line(Transform2D frame, Point2D tail, Vector2D v, std::string color); // Transform2D should be passed by ref to const since it may be relatively large
 
   /// \brief Draw a point in svg file
   /// \param frame the frame to draw on

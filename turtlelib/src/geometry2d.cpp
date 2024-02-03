@@ -21,7 +21,7 @@ double normalize_angle(double rad)
   if ((rad > -turtlelib::PI) && (rad <= turtlelib::PI)) {
     return rad;
   } else if (rad > turtlelib::PI) {
-    return turtlelib::normalize_angle(rad - 2 * turtlelib::PI);
+      return turtlelib::normalize_angle(rad - 2 * turtlelib::PI); //2.0 rather than 2
   } else {
     return turtlelib::normalize_angle(rad + 2 * turtlelib::PI);
   }
@@ -35,10 +35,10 @@ std::ostream & operator<<(std::ostream & os, const Point2D & p)
 
 std::istream & operator>>(std::istream & is, Point2D & p)
 {
-  std::string x_str;
+    std::string x_str; // declare closer to their use
   std::string y_str;
 
-  char first = is.peek();
+  char first = is.peek(); // const auto
   bool has_brk = (first == '[');
 
   is >> x_str;
@@ -59,7 +59,7 @@ Vector2D operator-(const Point2D & head, const Point2D & tail)
 {
   double result_x = head.x - tail.x;
   double result_y = head.y - tail.y;
-
+// no need for the temporary just return {head.x -tail.x, head.y -tail.y}
   return {result_x, result_y};
 }
 

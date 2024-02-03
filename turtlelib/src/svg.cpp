@@ -17,6 +17,7 @@
 
 namespace turtlelib
 {
+    // This should be implemented in se2d.hpp no there...
 Vector2D normalize(Vector2D v)
 {
   double mag = sqrt(pow(v.x, 2.0) + pow(v.y, 2.0));
@@ -30,6 +31,8 @@ Svg::Svg()
 }
 
 Svg::Svg(const std::string filename)
+// this should likely throw an exception if the filename is not opened properly.
+/// Constructors should always leave the object in a valid state
 {
   __ofs.open(filename);
   init_svg();
@@ -44,6 +47,7 @@ void Svg::draw_line(Transform2D frame, Point2D tail, Vector2D v, std::string col
   Point2D head_tf = __point_tf(head);
   Point2D tail_tf = __point_tf(tail);
 
+  /// THe constructor should likely prevent the __ofs from not being open at this point
   if (__ofs.is_open()) {
     __ofs << "<line x1=\"" << head_tf.x << "\" x2=\"" << tail_tf.x << "\" ";
     __ofs << "y1=\"" << head_tf.y << "\" y2=\"" << tail_tf.y << "\" ";

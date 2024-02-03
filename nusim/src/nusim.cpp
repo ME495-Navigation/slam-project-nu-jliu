@@ -259,7 +259,7 @@ private:
   /// other attributes
   double rate__;
   uint64_t timestep__;
-  double turtle_x__;
+    double turtle_x__; // No __
   double turtle_y__;
   double turtle_theta__;
   double x_0__;
@@ -284,6 +284,7 @@ public:
     wall_height__(0.25), wall_thickness__(0.1), obstacle_height__(0.25)
   {
     /// parameter descriptions
+      // No need to declare than initialize, use braces to initialize
     ParameterDescriptor rate_des;
     ParameterDescriptor x0_des;
     ParameterDescriptor y0_des;
@@ -304,6 +305,7 @@ public:
     obs_r_des.description = "The radius of the obstacles";
 
     /// declare parameters
+    // No need for this->
     this->declare_parameter("rate", 100.0, rate_des);
     this->declare_parameter("x0", 0.0, x0_des);
     this->declare_parameter("y0", 0.0, y0_des);
@@ -327,9 +329,9 @@ public:
 
     /// check for x y length
     if (obstacles_x__.size() != obstacles_y__.size()) {
-      RCLCPP_ERROR(this->get_logger(), "The x and y coordinates should have the same length");
+        RCLCPP_ERROR(this->get_logger(), "The x and y coordinates should have the same length"); // no need for this->
       throw std::invalid_argument("The x and y coordinate should have same length");
-      exit(EXIT_FAILURE);
+      exit(EXIT_FAILURE); // this exit statement is never reached, no need for it you are throwing exception
     }
 
     /// initialize attributes
@@ -339,7 +341,7 @@ public:
     marker_qos__.transient_local();
 
     /// timer
-    timer__ = this->create_wall_timer(
+    timer__ = this->create_wall_timer( // no this->, the second this is needed however
       duration<long double>{1.0 / rate__},
       std::bind(&NuSim::timer_callback__, this));
 
