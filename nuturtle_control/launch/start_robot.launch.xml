@@ -35,7 +35,7 @@
     </group>
 
     <group if="$(eval '\'$(var cmd_src)\' == \'teleop\'')">
-        <node pkg="turtlebot3_teleop" exec="teleop_twistkeyboard" />
+        <node pkg="turtlebot3_teleop" exec="teleop_keyboard" launch-prefix="xterm -e"/>
     </group>
 
     <!-- robot argument -->
