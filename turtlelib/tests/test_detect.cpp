@@ -91,4 +91,18 @@ TEST_CASE("Test shift coordinate", "[shift_coordinate]")
   REQUIRE_THAT(x_mean_new, WithinAbs(0.0, TOLERANCE));
   REQUIRE_THAT(y_mean_new, WithinAbs(0.0, TOLERANCE));
 }
+
+TEST_CASE("Test Compute z mean", "[compute_z_mean]")
+{
+  std::vector<Point2D> test_data1{{1.2, 3.4}, {-1.3, 4.6}, {-3.3, -0.9}};
+  CircleDetect detect1(test_data1);
+  double z_mean1 = detect1.compute_z_mean();
+
+  std::vector<Point2D> test_data2{{3.6, -1.2}, {-2.5, -4.6}, {9.3, -9.9}};
+  CircleDetect detect2(test_data2);
+  double z_mean2 = detect2.compute_z_mean();
+
+  REQUIRE_THAT(z_mean1, WithinAbs(47.55 / 3.0, TOLERANCE));
+  REQUIRE_THAT(z_mean2, WithinAbs(226.31 / 3.0, TOLERANCE));
+}
 } /// namespace turtlelib

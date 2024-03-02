@@ -12,7 +12,7 @@ class CircleDetect
 {
 private:
   std::vector<Point2D> data_points_;
-  int num_data_;
+  size_t num_data_;
 
 public:
   CircleDetect();
