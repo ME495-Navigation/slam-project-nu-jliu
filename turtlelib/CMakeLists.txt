@@ -29,6 +29,7 @@ set(TURTLELIB_SRC_FILES
     src/svg.cpp
     src/trig2d.cpp
     src/ekf_slam.cpp
+    src/detect.cpp
 )
 
 add_library(${PROJECT_NAME} 
