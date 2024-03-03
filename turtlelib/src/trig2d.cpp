@@ -39,7 +39,6 @@ double find_distance(double alpha, Obstacle obs)
 {
   Vector2D v_AO = Vector2D{obs.x, obs.y};
   const auto alpha_prime = fabs(alpha - atan2(obs.y, obs.x));
-  std::cout << "alpha_prime = " << alpha_prime << std::endl;
   const auto a = magnitude(v_AO);
 
   if (almost_equal(alpha_prime, 0.0)) {

@@ -17,7 +17,7 @@ private:
 public:
   CircleDetect();
 
-  CircleDetect(std::vector<Point2D> & data);
+  CircleDetect(const int num);
 
   void update_data(std::vector<Point2D> & data);
 
@@ -25,13 +25,15 @@ public:
 
   double compute_y_mean();
 
-  void shift_coordinate(double x_mean, double y_mean);
+  void shift_coordinate(const double x_mean, const double y_mean);
 
   double compute_z_mean();
 
   arma::mat construct_Z_mat();
 
-  arma::mat compute_M_mat(arma::mat Z_mat);
+  arma::mat compute_M_mat(const arma::mat & Z_mat);
+
+  arma::mat construct_H_marix(const double z_mean);
 
   std::vector<Point2D> & get_data_points();
 };

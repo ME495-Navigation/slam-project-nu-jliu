@@ -156,8 +156,12 @@ private:
     pose.pose.orientation.w = cos(turtlebot_.config_theta() / 2.0);
 
     poses_.push_back(pose);
-    msg_path.poses = poses_;
 
+    if (poses_.size() >= max_path_len_) {
+      poses_.erase(poses_.begin());
+    }
+
+    msg_path.poses = poses_;
     pub_path_->publish(msg_path);
   }
 
@@ -238,6 +242,9 @@ private:
   /// Service
   rclcpp::Service<InitialPose>::SharedPtr srv_initial_pose_;
 
+  /// QoS Policy
+  rclcpp::QoS path_qos_;
+
   /// Subscribed messages
   JointState joint_states_curr_;
   JointState joint_states_prev_;
@@ -253,6 +260,7 @@ private:
   double wheel_radius_;
 
   /// other attributes
+  size_t max_path_len_;
   turtlelib::DiffDrive turtlebot_;
   bool joint_states_available_;
   size_t index_left_;
@@ -264,8 +272,8 @@ private:
 public:
   /// @brief
   Odom()
-  : Node("odometry"), joint_states_available_(false), index_left_(SIZE_MAX), index_right_(
-      SIZE_MAX)
+  : Node("odometry"), path_qos_(10), max_path_len_(1000), joint_states_available_(false),
+    index_left_(SIZE_MAX), index_right_(SIZE_MAX)
   {
     ParameterDescriptor body_id_des;
     ParameterDescriptor odom_id_des;
@@ -312,6 +320,8 @@ public:
       exit(EXIT_FAILURE);
     }
 
+    path_qos_.transient_local();
+
     tf_broadcater_ = std::make_unique<TransformBroadcaster>(*this);
 
     timer_ = create_wall_timer(4ms, std::bind(&Odom::timer_callback_, this));
@@ -322,7 +332,7 @@ public:
       std::bind(&Odom::sub_joint_states_callback_, this, std::placeholders::_1));
 
     pub_odometry_ = create_publisher<Odometry>("odom", 10);
-    pub_path_ = create_publisher<Path>("~/path", 10);
+    pub_path_ = create_publisher<Path>("~/path", path_qos_);
 
     srv_initial_pose_ =
       create_service<InitialPose>(

@@ -655,6 +655,7 @@ private:
   /// qos profile
   rclcpp::QoS marker_qos_;
   rclcpp::QoS laser_qos_;
+  rclcpp::QoS path_qos_;
 
   /// subscribed messages
   WheelCommands wheel_cmd_;
@@ -713,9 +714,9 @@ private:
 public:
   /// \brief Initialize the nusim node
   NuSim()
-  : Node("nusim"), marker_qos_(10), laser_qos_(10), count_(0), timestep_(0), wall_r_(1.0),
-    wall_g_(0.0), wall_b_(0.0), wall_height_(0.25), wall_thickness_(0.1), obstacle_height_(0.25),
-    world_frame_id_("nusim/world"), body_frame_id_("red/base_footprint"),
+  : Node("nusim"), marker_qos_(10), laser_qos_(10), path_qos_(10), count_(0), timestep_(0),
+    wall_r_(1.0), wall_g_(0.0), wall_b_(0.0), wall_height_(0.25), wall_thickness_(0.1),
+    obstacle_height_(0.25), world_frame_id_("nusim/world"), body_frame_id_("red/base_footprint"),
     scan_frame_id_("red/base_scan")
   {
     /// parameter descriptions
@@ -880,7 +881,7 @@ public:
       pub_timestep_ = create_publisher<UInt64>("~/timestep", 10);
       pub_sensor_data_ = create_publisher<SensorData>("red/sensor_data", 10);
       pub_fake_sensor_markers_ = create_publisher<MarkerArray>("fake_sensor", marker_qos_);
-      pub_path_ = create_publisher<Path>("~/path", 10);
+      pub_path_ = create_publisher<Path>("~/path", path_qos_);
       pub_laser_scan_ = create_publisher<LaserScan>("scan", laser_qos_);
       pub_obstacles_ = create_publisher<ObstacleMeasurements>("obs_pos", 10);
     }

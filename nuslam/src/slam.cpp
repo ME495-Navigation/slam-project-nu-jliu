@@ -435,6 +435,7 @@ private:
 
   /// QoS
   rclcpp::QoS marker_qos_;
+  rclcpp::QoS path_qos_;
 
   /// Subscribed messages
   JointState joint_states_curr_;
@@ -481,8 +482,8 @@ private:
 public:
   /// \brief
   Slam()
-  : Node("odometry"), marker_qos_(10), joint_states_available_(false), index_left_(SIZE_MAX),
-    index_right_(SIZE_MAX), num_obstacles_(20), turtle_slam_(num_obstacles_),
+  : Node("odometry"), marker_qos_(10), path_qos_(10), joint_states_available_(false),
+    index_left_(SIZE_MAX), index_right_(SIZE_MAX), num_obstacles_(20), turtle_slam_(num_obstacles_),
     marker_radius_(0.038), marker_height_(0.25), Tmo_({0.0, 0.0}, 0.0), landmark_updated_(false)
   {
     ParameterDescriptor body_id_des;
@@ -554,6 +555,7 @@ public:
 
     /// QoS
     marker_qos_.transient_local();
+    path_qos_.transient_local();
 
     /// Transform broadcaster
     tf_broadcater_ = std::make_unique<TransformBroadcaster>(*this);
@@ -581,7 +583,7 @@ public:
 
     /// Publishers
     pub_odometry_ = create_publisher<Odometry>("odom", 10);
-    pub_path_ = create_publisher<Path>("~/path", 10);
+    pub_path_ = create_publisher<Path>("~/path", path_qos_);
     pub_map_array_ = create_publisher<MarkerArray>("~/map", marker_qos_);
 
     /// Services

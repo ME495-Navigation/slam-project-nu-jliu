@@ -46,6 +46,13 @@ set(ODOMETRY_DEPENDENCIES
     nuturtle_interfaces
 )
 
+set(LANDMARKS_DEPENDENCIES
+    rclcpp
+    rcl_interfaces
+    sensor_msgs
+    visualization_msgs
+)
+
 add_executable(slam src/slam.cpp)
 ament_target_dependencies(slam
     ${SLAM_DEPENDENCIES}
@@ -64,9 +71,19 @@ target_link_libraries(odometry
     ${ARMADELLO_LIBRARIES}
 )
 
+add_executable(landmarks src/landmarks.cpp)
+ament_target_dependencies(landmarks
+    ${LANDMARKS_DEPENDENCIES}
+)
+target_link_libraries(landmarks
+    turtlelib::turtlelib
+    ${ARMADELLO_LIBRARIES}
+)
+
 install(TARGETS
     slam
     odometry
+    landmarks
     DESTINATION lib/${PROJECT_NAME}
 )
 
