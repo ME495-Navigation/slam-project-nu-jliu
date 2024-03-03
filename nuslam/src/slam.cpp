@@ -316,8 +316,12 @@ private:
     pose.pose.orientation.w = cos(Tmb.rotation() / 2.0);
 
     poses_.push_back(pose);
-    msg_path.poses = poses_;
 
+    if (poses_.size() >= max_path_len_) {
+      poses_.erase(poses_.begin());
+    }
+
+    msg_path.poses = poses_;
     pub_path_->publish(msg_path);
   }
 
@@ -456,6 +460,7 @@ private:
   double sensor_noice_;
 
   /// other attributes
+  size_t max_path_len_;
   bool joint_states_available_;
   size_t index_left_;
   size_t index_right_;
@@ -476,15 +481,13 @@ private:
   turtlelib::Transform2D Tmo_;
   bool landmark_updated_;
 
-  /// Constants
-  const size_t MAX_PATH_LEN = 100;
-
 public:
   /// \brief
   Slam()
-  : Node("odometry"), marker_qos_(10), path_qos_(10), joint_states_available_(false),
-    index_left_(SIZE_MAX), index_right_(SIZE_MAX), num_obstacles_(20), turtle_slam_(num_obstacles_),
-    marker_radius_(0.038), marker_height_(0.25), Tmo_({0.0, 0.0}, 0.0), landmark_updated_(false)
+  : Node("odometry"), marker_qos_(10), path_qos_(10), max_path_len_(1000),
+    joint_states_available_(false), index_left_(SIZE_MAX), index_right_(SIZE_MAX),
+    num_obstacles_(20), turtle_slam_(num_obstacles_), marker_radius_(0.038), marker_height_(0.25),
+    Tmo_({0.0, 0.0}, 0.0), landmark_updated_(false)
   {
     ParameterDescriptor body_id_des;
     ParameterDescriptor odom_id_des;

@@ -387,6 +387,10 @@ private:
 
     poses_.push_back(pose_curr);
 
+    if (poses_.size() >= max_path_len_) {
+      poses_.erase(poses_.begin());
+    }
+
     Path msg_path;
 
     msg_path.header.stamp = this->get_clock()->now();
@@ -687,6 +691,7 @@ private:
   bool draw_only_;
 
   /// other attributes
+  size_t max_path_len_;
   int count_;
   double period_;
   uint64_t timestep_;
@@ -714,10 +719,10 @@ private:
 public:
   /// \brief Initialize the nusim node
   NuSim()
-  : Node("nusim"), marker_qos_(10), laser_qos_(10), path_qos_(10), count_(0), timestep_(0),
-    wall_r_(1.0), wall_g_(0.0), wall_b_(0.0), wall_height_(0.25), wall_thickness_(0.1),
-    obstacle_height_(0.25), world_frame_id_("nusim/world"), body_frame_id_("red/base_footprint"),
-    scan_frame_id_("red/base_scan")
+  : Node("nusim"), marker_qos_(10), laser_qos_(10), path_qos_(10), max_path_len_(1000), count_(0),
+    timestep_(0), wall_r_(1.0), wall_g_(0.0), wall_b_(0.0), wall_height_(0.25),
+    wall_thickness_(0.1), obstacle_height_(0.25), world_frame_id_("nusim/world"),
+    body_frame_id_("red/base_footprint"), scan_frame_id_("red/base_scan")
   {
     /// parameter descriptions
     ParameterDescriptor rate_des;
@@ -852,6 +857,7 @@ public:
       // set marker qos policy
       marker_qos_.transient_local();
       laser_qos_.transient_local();
+      path_qos_.transient_local();
 
       /// timer
       timer_ = create_wall_timer(

@@ -9,7 +9,7 @@
     obstacles/x: [-0.5, 0.8, 0.4]
     obstacles/y: [-0.7, -0.8, 0.8]
     obstacles/r: 0.038
-    input_noice: 0.1 #0.1
+    input_noice: 0.0 #0.1
     slip_fraction: 0.1 #0.1
-    basic_sensor_variance: 1e-4 #1e-4
+    basic_sensor_variance: 0.0 #1e-4
     max_range: 3.5

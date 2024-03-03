@@ -10,6 +10,9 @@ Panels:
         - /Corrected Odometry1/Covariance1/Position1
         - /Corrected Odometry1/Covariance1/Orientation1
         - /Error Odometry1/Shape1
+        - /ActualPath1/Topic1
+        - /OdometryPath1/Topic1
+        - /SlamPath1/Topic1
       Splitter Ratio: 0.5
     Tree Height: 549
   - Class: rviz_common/Selection
@@ -479,7 +482,7 @@ Visualization Manager:
       Shaft Length: 0.10000000149011612
       Topic:
         Depth: 5
-        Durability Policy: Volatile
+        Durability Policy: Transient Local
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
@@ -507,7 +510,7 @@ Visualization Manager:
       Shaft Length: 0.10000000149011612
       Topic:
         Depth: 5
-        Durability Policy: Volatile
+        Durability Policy: Transient Local
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
@@ -535,7 +538,7 @@ Visualization Manager:
       Shaft Length: 0.10000000149011612
       Topic:
         Depth: 5
-        Durability Policy: Volatile
+        Durability Policy: Transient Local
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
@@ -544,8 +547,8 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 3.0062477588653564
-        Min Value: -3.0052199363708496
+        Max Value: 3.0048751831054688
+        Min Value: -3.0046274662017822
         Value: true
       Axis: X
       Channel Name: intensity
