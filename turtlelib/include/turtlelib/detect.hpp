@@ -8,6 +8,13 @@
 
 namespace turtlelib
 {
+struct Landmark
+{
+  double x;
+  double y;
+  double r;
+};
+
 class CircleDetect
 {
 private:
@@ -33,7 +40,9 @@ public:
 
   arma::mat compute_M_mat(const arma::mat & Z_mat);
 
-  arma::mat construct_H_marix(const double z_mean);
+  arma::mat construct_H_mat(const double z_mean);
+
+  Landmark detect_circle();
 
   std::vector<Point2D> & get_data_points();
 };

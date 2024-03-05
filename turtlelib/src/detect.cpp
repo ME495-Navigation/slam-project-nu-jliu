@@ -101,7 +101,7 @@ arma::mat CircleDetect::compute_M_mat(const arma::mat & Z_mat)
   return 1.0 / static_cast<double>(num_data_) * Z_mat.t() * Z_mat;
 }
 
-arma::mat CircleDetect::construct_H_marix(const double z_mean)
+arma::mat CircleDetect::construct_H_mat(const double z_mean)
 {
   arma::mat H_mat(4, 4, arma::fill::zeros);
 
@@ -112,6 +112,62 @@ arma::mat CircleDetect::construct_H_marix(const double z_mean)
   H_mat(3, 0) = 2.0;
 
   return H_mat;
+}
+
+Landmark CircleDetect::detect_circle()
+{
+  const auto x_hat = compute_x_mean();
+  const auto y_hat = compute_y_mean();
+
+  shift_coordinate(x_hat, y_hat);
+  const auto z_bar = compute_z_mean();
+
+  const arma::mat Z_mat = construct_Z_mat();
+  const arma::mat M_mat = compute_M_mat(Z_mat);
+  const arma::mat H_mat = construct_H_mat(z_bar);
+  const arma::mat H_inv = H_mat.i();
+
+  arma::mat U_mat;
+  arma::vec sigma_vec;
+  arma::mat V_mat;
+  arma::svd(U_mat, sigma_vec, V_mat, Z_mat);
+
+  const arma::mat Sigma_mat = arma::diagmat(sigma_vec);
+  const double sigma_min = sigma_vec.min();
+
+  arma::vec A_vec;
+
+  if (sigma_min < 1e-12) {
+    A_vec = V_mat.col(3);
+  } else {
+    const arma::mat Y_mat = V_mat * Sigma_mat * V_mat.t();
+    const arma::mat Q_mat = Y_mat * H_inv * Y_mat;
+
+    arma::vec eig_val;
+    arma::mat eig_vec;
+    arma::eig_sym(eig_val, eig_vec, Q_mat);
+    // std::cout << "-------- HERE -------" << std::endl;
+
+    const auto eig_min_ind = eig_val.index_min();
+    const arma::vec A_star_vec = eig_vec.col(eig_min_ind);
+
+    A_vec = arma::solve(Y_mat, A_star_vec);
+  }
+
+  const auto A1 = A_vec(0);
+  const auto A2 = A_vec(1);
+  const auto A3 = A_vec(2);
+  const auto A4 = A_vec(3);
+
+  const auto a = -A2 / (2.0 * A1);
+  const auto b = -A3 / (2.0 * A1);
+  const auto R2 = (pow(A2, 2.0) + pow(A3, 2.0) - 4.0 * A1 * A4) / (4.0 * pow(A1, 2.0));
+
+  const auto x_center = a + x_hat;
+  const auto y_center = b + y_hat;
+  const auto R_center = sqrt(R2);
+
+  return {x_center, y_center, R_center};
 }
 
 std::vector<Point2D> & CircleDetect::get_data_points()

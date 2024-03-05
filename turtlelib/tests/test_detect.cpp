@@ -241,4 +241,40 @@ TEST_CASE("Test M matrix", "[compute_M_mat]")
   REQUIRE_THAT(M_mat2(3, 2), WithinAbs(0.0, 1e-4));
   REQUIRE_THAT(M_mat2(3, 3), WithinAbs(1.0, 1e-4));
 }
+
+TEST_CASE("Test Circle Detection", "[detect_circle]")
+{
+  std::vector<Point2D> data1{
+    {1.0, 7.0},
+    {2.0, 6.0},
+    {5.0, 8.0},
+    {7.0, 7.0},
+    {9.0, 5.0},
+    {3.0, 7.0}
+  };
+
+  std::vector<Point2D> data2{
+    {-1.0, 0.0},
+    {-0.3, -0.06},
+    {0.3, 0.1},
+    {1.0, 1.0}
+  };
+
+  CircleDetect detet;
+
+  detet.update_data(data1);
+  const Landmark lm1 = detet.detect_circle();
+
+  detet.update_data(data2);
+  const Landmark lm2 = detet.detect_circle();
+
+  REQUIRE_THAT(lm1.x, WithinAbs(4.615482, 1e-4));
+  REQUIRE_THAT(lm1.y, WithinAbs(2.807354, 1e-4));
+  REQUIRE_THAT(lm1.r, WithinAbs(4.8275, 1e-4));
+
+  REQUIRE_THAT(lm2.x, WithinAbs(0.4908357, 1e-4));
+  REQUIRE_THAT(lm2.y, WithinAbs(-22.15212, 1e-4));
+  REQUIRE_THAT(lm2.r, WithinAbs(22.17979, 1e-4));
+  // std::cout << lm1.x << " " << lm1.y << " " << lm1.r << std::endl;
+}
 } /// namespace turtlelib

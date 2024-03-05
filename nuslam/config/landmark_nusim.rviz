@@ -279,6 +279,18 @@ Visualization Manager:
         Reliability Policy: Reliable
         Value: /slam/map
       Value: true
+    - Class: rviz_default_plugins/MarkerArray
+      Enabled: true
+      Name: Detect
+      Namespaces:
+        "": true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /landmarks/detect
+      Value: true
     - Angle Tolerance: 0.10000000149011612
       Class: rviz_default_plugins/Odometry
       Covariance:
@@ -547,8 +559,8 @@ Visualization Manager:
     - Alpha: 1
       Autocompute Intensity Bounds: true
       Autocompute Value Bounds:
-        Max Value: 0.8228960633277893
-        Min Value: -0.517017662525177
+        Max Value: 0.8228194117546082
+        Min Value: -0.5157433748245239
         Value: true
       Axis: X
       Channel Name: intensity

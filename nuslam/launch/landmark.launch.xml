@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="robot" default="nusim" />
+    <arg name="cmd_src" default="teleop" />
+
+    <include file="$(find-pkg-share nuslam)/launch/slam.launch.xml">
+        <arg name="robot" value="$(var robot)" />
+        <arg name="cmd_src" value="$(var cmd_src)" />
+        <arg name="use_rviz" value="false" />
+    </include>
+
+    <node pkg="nuslam" exec="landmarks" name="landmarks" />
+    <node
+        pkg="rviz2"
+        exec="rviz2"
+        name="rviz2"
+        args="-d $(find-pkg-share nuslam)/config/landmark_$(var robot).rviz"
+    />
+</launch>
